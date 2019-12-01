@@ -24,22 +24,44 @@ defmodule Day1 do
 
   ## Examples
 
-      iex> Day1.calculate_fuel_from_mass(12)
+      iex> Day1.calculate_total_fuel_from_mass(12)
       2
 
-      iex(1)> Day1.calculate_fuel_from_mass(14)
+      iex(1)> Day1.calculate_total_fuel_from_mass(14)
       2
 
-      iex(1)> Day1.calculate_fuel_from_mass(1969)
-      654
+      iex(1)> Day1.calculate_total_fuel_from_mass(1969)
+      966
 
-      iex(1)> Day1.calculate_fuel_from_mass(100756)
-      33583
+      iex(1)> Day1.calculate_total_fuel_from_mass(100756)
+      50346
 
   """
+  def calculate_total_fuel_from_mass(mass) do
+    calculate_fuel_from_mass(0, mass)
+  end
 
-  def calculate_fuel_from_mass(mass) do
-    div(mass, 3) - 2
+  def calculate_fuel_from_mass(current_mass, mass) when mass < 9 do
+    current_mass
+  end
+
+  def calculate_fuel_from_mass(current_mass, mass) when mass >= 9 do
+    fuel_mass_for_mass = div(mass, 3) - 2
+    new_mass = fuel_mass_for_mass + current_mass
+    calculate_fuel_from_mass(new_mass, fuel_mass_for_mass)
+  end
+
+  def sum(list) do
+    do_sum(0, list)
+  end
+
+  defp do_sum(current_sum, []) do
+    current_sum
+  end
+
+  defp do_sum(current_sum, [head | tail]) do
+    new_sum = head + current_sum
+    do_sum(new_sum, tail)
   end
 
   @doc """
@@ -56,7 +78,7 @@ defmodule Day1 do
   Calculate the fuel for each module. Returns a list of the results.
   """
   def calculate_fuel_for_each_module(list_of_modules) do
-    Enum.map(list_of_modules, fn x -> calculate_fuel_from_mass(x) end)
+    Enum.map(list_of_modules, fn x -> calculate_total_fuel_from_mass(x) end)
   end
 
   def calculate_total_fuel_requirement_for_all_modules() do
